@@ -26,4 +26,16 @@ print(y.dynamicType) // Optional<Bool>
 let z = x!.isEmpty
 print(z.dynamicType) // Bool
 
-// The problem with implicitly unwrapping is that if for some reason... 🔥
+// The problem with implicitly unwrapping is that if for some reason the
+// assumption made by who wrote the code that the implicitly unwrapped value
+// would have never been nil was wrong, and such value actually happens to be
+// nil, well then the code will crash.
+
+let sneakyNilValue: Optional<String> = nil
+_ = sneakyNilValue!.isEmpty
+// fatal error: unexpectedly found nil while unwrapping an Optional value
+// Current stack trace:
+// 0    libswiftCore.dylib                 0x000000010a2fd730 swift_reportError + 132
+// 1    libswiftCore.dylib                 0x000000010a319cf0 _swift_stdlib_reportFatalError + 61
+// 2    libswiftCore.dylib                 0x000000010a11e300 specialized specialized StaticString.withUTF8Buffer<A> (invoke : (UnsafeBufferPointer<UInt8>) -> A) -> A + 351
+// ...
